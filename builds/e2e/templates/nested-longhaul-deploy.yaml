@@ -28,7 +28,8 @@ parameters:
   metricsCollector.uploadTarget: ''
   metricsCollector.hostPlatform: ''
   test.runtimeLogLevel: ''
-
+  longHaul.parentHostname: ''
+  longHaul.parentEdgeDevice: ''
 steps:
   - task: CopyFiles@2
     displayName: 'Copy Edgelet Artifact'
@@ -87,5 +88,7 @@ steps:
           -testInfo "$testInfo" \
           -testStartDelay "${{ parameters['test.startDelay'] }}" \
           -runtimeLogLevel "${{ parameters['test.runtimeLogLevel'] }}" \
+          -parentHostname "${{ parameters['longHaul.parentHostname'] }}" \
+          -parentEdgeDevice "${{ parameters['longHaul.parentEdgeDevice'] }}" \
           -cleanAll
       workingDirectory: "$(Agent.HomeDirectory)/.."
