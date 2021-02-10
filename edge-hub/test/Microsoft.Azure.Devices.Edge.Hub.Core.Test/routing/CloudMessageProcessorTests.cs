@@ -108,16 +108,16 @@ namespace Microsoft.Azure.Devices.Edge.Hub.Core.Test.Routing
 
             ISinkResult<IRoutingMessage> result2 = await cloudMessageProcessor.ProcessAsync(message2, CancellationToken.None);
             Assert.NotNull(result2);
-            Assert.Empty(result2.InvalidDetailsList);
-            Assert.NotEmpty(result2.Failed);
+            Assert.NotEmpty(result2.InvalidDetailsList);
+            Assert.Empty(result2.Failed);
             Assert.Empty(result2.Succeeded);
             Assert.True(result2.SendFailureDetails.HasValue);
 
             ISinkResult<IRoutingMessage> resultBatch = await cloudMessageProcessor.ProcessAsync(new[] { message1, message2 }, CancellationToken.None);
             Assert.NotNull(resultBatch);
             Assert.Equal(1, resultBatch.Succeeded.Count);
-            Assert.Equal(1, resultBatch.Failed.Count);
-            Assert.Empty(resultBatch.InvalidDetailsList);
+            Assert.Empty(result1.Failed);
+            Assert.Equal(1, resultBatch.InvalidDetailsList.Count);
             Assert.True(resultBatch.SendFailureDetails.HasValue);
 
             ISinkResult<IRoutingMessage> resultBatchCancelled = await cloudMessageProcessor.ProcessAsync(new[] { message1, message2 }, new CancellationToken(true));

@@ -96,12 +96,12 @@ namespace Microsoft.Azure.Devices.Edge.Hub.Core.Test.Routing
             string cloudEndpointId = Guid.NewGuid().ToString();
 
             Mock.Get(routingMessage).Setup(rm => rm.SystemProperties).Returns(new Dictionary<string, string> { { "connectionDeviceId", "myConnectionDeviceId" } });
-            var cloudEndpoint = new CloudEndpoint(cloudEndpointId, id => Task.FromResult(new Try<ICloudProxy>(new EdgeHubConnectionException("EdgeHubConnectionException"))), routingMessageConverter);
+            var cloudEndpoint = new CloudEndpoint(cloudEndpointId, id => Task.FromResult(new Try<ICloudProxy>(new IOException("IOException"))), routingMessageConverter);
 
             IProcessor cloudMessageProcessor = cloudEndpoint.CreateProcessor();
             ISinkResult<IRoutingMessage> sinkResult = await cloudMessageProcessor.ProcessAsync(routingMessage, CancellationToken.None);
             Assert.Equal(FailureKind.Transient, sinkResult.SendFailureDetails.OrDefault().FailureKind);
-            Assert.Equal(typeof(EdgeHubConnectionException), sinkResult.SendFailureDetails.OrDefault().RawException.GetType());
+            Assert.Equal(typeof(EdgeHubIOException), sinkResult.SendFailureDetails.OrDefault().RawException.GetType());
         }
 
         [Fact]
